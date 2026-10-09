@@ -1,0 +1,8 @@
+<h3><%= count %> последних новостей в категории <%= categoryName %></h3>
+
+<dl>
+  <% news.forEach(function (item) { %>
+    <dt><a href="<%= item.link %>" target="_blank"><%= item.title %></a></dt>
+    <dd><%= item.description %></dd>
+  <% }); %>
+</dl>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Новости Ведомостей</title>
+</head>
+<body>
+  <h2>Новости Ведомостей</h2>
+
+  <label>Категория:
+    <select id="category"></select>
+  </label>
+
+  <label>Сколько:
+    <input type="number" id="count" value="5" min="1" max="10">
+  </label>
+
+  <button id="btn">Показать</button>
+
+  <div id="result"></div>
+
+  <script>
+    const select = document.getElementById('category');
+    const countInput = document.getElementById('count');
+    const button = document.getElementById('btn');
+    const result = document.getElementById('result');
+
+    fetch('/categories')
+      .then((response) => response.json())
+      .then((categories) => {
+        categories.forEach((cat) => {
+          const option = document.createElement('option');
+          option.value = cat.id;        
+          option.textContent = cat.name; 
+          select.appendChild(option);
+        });
+      })
+      .catch(() => {
+        result.textContent = 'Не удалось загрузить список категорий';
+      });
+
+    button.addEventListener('click', () => {
+      const url = '/' + countInput.value + '/news/for/' + select.value;
+
+      fetch(url)
+        .then((response) => response.text()) 
+        .then((html) => {
+          result.innerHTML = html;  
+        })
+        .catch(() => {
+          result.textContent = 'Ошибка при загрузке новостей';
+        });
+    });
+  </script>
+</body>
+</html>
